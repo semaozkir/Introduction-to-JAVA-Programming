@@ -11,10 +11,11 @@ public class Main {
         try {
 
             connection = helper.getConnection();
-            statement = connection.prepareStatement
-                    ("insert into city(Name,CountryCode,District,Population)values('Düzce','TUR','Düzce',50000)");
+            String sql="delete from city where id=?";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1,4094);
             int result = statement.executeUpdate();
-            System.out.println("Kayıt eklendi");
+            System.out.println("Kayıt silindi");
 
         } catch (SQLException exception) {
             helper.showErrorMessage(exception);
@@ -49,6 +50,55 @@ public class Main {
             helper.showErrorMessage(exception);
 
         } finally {
+            connection.close();
+        }
+    }
+
+    public static void insertData()throws SQLException{
+        Connection connection = null;
+        DbHelper helper = new DbHelper();
+        PreparedStatement statement = null;
+        ResultSet resultSet;
+        try {
+
+            connection = helper.getConnection();
+            String sql="insert into city (Name,CountryCode,District,Population) values (?,?,?,?)";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1,"Düzce");
+            statement.setString(2,"TUR");
+            statement.setString(3,"Turkey");
+            statement.setInt(4,70000);
+            int result = statement.executeUpdate();
+            System.out.println("Kayıt eklendi");
+
+        } catch (SQLException exception) {
+            helper.showErrorMessage(exception);
+
+        } finally {
+            statement.close();
+            connection.close();
+        }
+    }
+
+    public static void updateData() throws SQLException{
+        Connection connection = null;
+        DbHelper helper = new DbHelper();
+        PreparedStatement statement = null;
+        ResultSet resultSet;
+        try {
+
+            connection = helper.getConnection();
+            String sql="update city set population=70000,district='Düzce' where id=?";
+            statement = connection.prepareStatement(sql);
+            statement.setInt(1,4090);
+            int result = statement.executeUpdate();
+            System.out.println("Kayıt güncellendi");
+
+        } catch (SQLException exception) {
+            helper.showErrorMessage(exception);
+
+        } finally {
+            statement.close();
             connection.close();
         }
     }
